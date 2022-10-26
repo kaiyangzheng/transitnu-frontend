@@ -24,9 +24,11 @@ export default function Map(props){
                     let polylines = line['polylines'];
                     let color = "#" + line['color'];
                     return <>
-                        <MapTrainLine 
-                            encodedPolyline={polylines[0]}
-                            color={color}/>
+                        {polylines.map((polyline)=>{
+                            return <MapTrainLine
+                                encodedPolyline={polyline}
+                                color={color}/>
+                        })}
                     </>
                 })}
             </MapView>
