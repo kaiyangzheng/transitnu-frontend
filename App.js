@@ -5,11 +5,15 @@ import * as Location from 'expo-location';
 import Map from './src/pages/Map';
 import {
   getLines,
+  getStops,
+  getTrains,
 } from './utils/loadData';
 
 export default function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [lines, setLines] = useState([]);
+  const [stops, setStops] = useState([])
+  const [trains, setTrains] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -26,15 +30,27 @@ export default function App() {
   useEffect(()=>{
     const getData = async () =>{
       await getLines(setLines);
+      await getStops(setStops);
+      await getTrains(setTrains);
     }
+
     getData();
+
+    const interval=setInterval(()=>{
+      getData()
+    }, 15000)
+
+
+    return()=>clearInterval(interval);
   }, [])
 
   return (
     <View style={styles.container}>
       <Map
         userLocation={userLocation}
-        lines={lines}/>
+        lines={lines}
+        trains={trains}
+        stops={stops}/>
     </View>
   );
 }

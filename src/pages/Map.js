@@ -1,17 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import MapView from 'react-native-maps';
 import { StyleSheet, View, Dimensions, Text } from 'react-native'
 
 import MapTrainLine from '../components/MapTrainLine';
-import UserLocation from '../components/UserLocation';
+import Train from '../components/Train';
+import Stop from '../components/Stop';
+
 
 export default function Map(props){
-    const { userLocation, lines } = props;
+    const { userLocation, lines, trains, stops } = props;
 
-    if (!userLocation){
+
+    if (!userLocation || !lines || !trains || !stops){
         return null;
     }
-    
+
+    const [zoom, setZoom] = useState((Math.log(360 / 0.04) / Math.LN2))
+
+    let trainStops = stops.filter((stop)=>{
+        return stop['id'].startsWith('place');
+    })
+
     return <>
         <View style={styles.container}>
             <MapView
@@ -19,15 +28,21 @@ export default function Map(props){
                 initialRegion={{
                     latitude: userLocation.coords.latitude,
                     longitude: userLocation.coords.longitude,
-                    latitudeDelta: 0.05,
-                    longitudeDelta: 0.05
+                    latitudeDelta: 0.04,
+                    longitudeDelta: 0.04
+                }}
+                onRegionChange={(region)=>{
+                    setZoom(Math.log(360 / region.longitudeDelta) / Math.LN2);
                 }}
                 zoomControlEnabled={true}
                 zoomEnabled={true}
                 scrollEnabled={true}
                 zoomTapEnabled={true}
+                showsUserLocation={true}
+                loadingEnabled={true}
+                showsPointsOfInterest={false}
+                mapType={"mutedStandard"}
                 >
-                <UserLocation userLocation={userLocation}/>
                 {lines.map((line)=>{
                     let polylines = line['polylines'];
                     let color = "#" + line['color'];
@@ -37,6 +52,17 @@ export default function Map(props){
                                 encodedPolyline={polyline}
                                 color={color}/>
                         })}
+                    </>
+                })}
+                {trains.map((train)=>{
+                    return <>
+                        <Train train={train}/>
+                    </>
+                })}
+
+                {trainStops.map((stop)=>{
+                    return <>
+                        <Stop stop={stop} zoom={zoom}/>
                     </>
                 })}
             </MapView>
