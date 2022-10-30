@@ -3,11 +3,14 @@ import { Marker } from 'react-native-maps';
 import { StyleSheet, View, Dimensions, Text, Image } from 'react-native'
 
 export default function Stop(props){
-    const { stop, zoom } = props;
+    const { stop, zoom, setSelectedStop } = props;
     const hideStopZoom = 13.1;
     return <>
         <Marker
-                coordinate={stop['location']}>
+                coordinate={stop['location']}
+                onPress={(e)=>{
+                    setSelectedStop(stop);
+                }}>
                     <View style={styles.stopContainer}>
                         <Image source={require('./../../assets/MBTA-logo.png')} style={{height: 15, width:15 }}/>
                         {zoom > hideStopZoom && <Text style={styles.stationName}>{stop['name']}</Text>}

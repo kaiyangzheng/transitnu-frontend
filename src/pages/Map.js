@@ -1,14 +1,24 @@
 import React, {useState} from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, View, Dimensions, Text } from 'react-native'
+import { StyleSheet, View, Dimensions, Pressable } from 'react-native'
 
 import MapTrainLine from '../components/MapTrainLine';
 import Train from '../components/Train';
 import Stop from '../components/Stop';
+import BottomDrawer from '../components/BottomDrawer';
 
 
 export default function Map(props){
-    const { userLocation, lines, trains, stops } = props;
+    const { userLocation, 
+            lines, 
+            trains, 
+            stops, 
+            selectedTrain,
+            setSelectedTrain,
+            selectedStop,
+            setSelectedStop,
+            selectedLine,
+            setSelectedLine} = props;
 
 
     if (!userLocation || !lines || !trains || !stops){
@@ -23,6 +33,7 @@ export default function Map(props){
 
     return <>
         <View style={styles.container}>
+
             <MapView
                 style={styles.map}
                 initialRegion={{
@@ -62,10 +73,11 @@ export default function Map(props){
 
                 {trainStops.map((stop)=>{
                     return <>
-                        <Stop stop={stop} zoom={zoom}/>
+                        <Stop stop={stop} zoom={zoom} setSelectedStop={setSelectedStop}/>
                     </>
                 })}
             </MapView>
+            <BottomDrawer open={selectedStop!=null} setSelectedItem={setSelectedStop}/>
         </View>
     </>
 }
@@ -79,6 +91,6 @@ const styles = StyleSheet.create({
     },
     map: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height
+        height: Dimensions.get('window').height +450
     }
 })

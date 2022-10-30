@@ -9,11 +9,15 @@ import {
   getTrains,
 } from './utils/loadData';
 
+
 export default function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [lines, setLines] = useState([]);
   const [stops, setStops] = useState([])
   const [trains, setTrains] = useState([]);
+  const [selectedLine, setSelectedLine] = useState(null);
+  const [selectedStop, setSelectedStop] = useState(null);
+  const [selectedTrain, setSelectedTrain] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -50,7 +54,13 @@ export default function App() {
         userLocation={userLocation}
         lines={lines}
         trains={trains}
-        stops={stops}/>
+        stops={stops}
+        selectedLine={selectedLine}
+        setSelectedLine={setSelectedLine}
+        selectedTrain={selectedTrain}
+        setSelectedTrain={setSelectedTrain}
+        selectedStop={selectedStop}
+        setSelectedStop={setSelectedStop}/>
     </View>
   );
 }
