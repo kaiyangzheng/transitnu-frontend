@@ -1,43 +1,48 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { View } from 'react-native';
-import RBSheet from "react-native-raw-bottom-sheet";
+import BottomSheet from 'reanimated-bottom-sheet';
 
-export default function StopBottomDrawer(props){
-    const { open, setSelectedItem } = props;
-    const refRBSheet = useRef();
+export default function BottomDrawer(props) {
+  const { selectItem, setSelectItem } = props;
 
-    useEffect(()=>{
-        if (open){
-            refRBSheet.current.open();
-        }
-    }, [open])
+  const renderContent = () => (
+    <View
+      style={{
+        backgroundColor: 'white',
+        padding: 16,
+        height: 800,
+      }}
+    >
+      {props.children}
+    </View>
+  );
 
-    return (
-        <View
+  const sheetRef = React.useRef(null);
+
+  return (
+    <>
+      <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#000"
+          backgroundColor: 'papayawhip',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        {/* <Button title="OPEN BOTTOM SHEET" onPress={() => refRBSheet.current.open()} /> */}
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          onClose={()=>setSelectedItem(null)}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "transparent"
-            },
-            draggableIcon: {
-              backgroundColor: "#000"
-            }
-          }}
-        >
-          {props.children}
-        </RBSheet>
+        {/* <Button
+          title="Open Bottom Sheet"
+          onPress={() => sheetRef.current.snapTo(0)}
+        /> */}
       </View>
-    )
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={[300, 800, 0]}
+        borderRadius={10}
+        renderContent={renderContent}
+        onCloseEnd={()=>{
+          setSelectItem(null);
+        }}
+      />
+    </>
+  );
 }

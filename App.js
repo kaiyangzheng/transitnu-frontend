@@ -9,7 +9,6 @@ import {
   getTrains,
 } from './utils/loadData';
 
-
 export default function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [lines, setLines] = useState([]);
