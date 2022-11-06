@@ -7,6 +7,7 @@ import MapTrainLine from '../components/MapTrainLine';
 import Train from '../components/Train';
 import Stop from '../components/Stop';
 import StopBottomDrawer from '../components/StopBottomDrawer';
+import TrainBottomDrawer from '../components/TrainBottomDrawer';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBVssmK2nnbTz3XIA1htc_sBxHd0WqmDhw';
 
@@ -70,13 +71,22 @@ export default function Map(props){
                 })}
                 {trains.map((train)=>{
                     return <>
-                        <Train train={train}/>
+                        <Train 
+                            train={train} 
+                            setSelectedTrain={setSelectedTrain}
+                            setSelectedStop={setSelectedStop}
+                            setSelectedLine={setSelectedLine}/>
                     </>
                 })}
 
                 {trainStops.map((stop)=>{
                     return <>
-                        <Stop stop={stop} zoom={zoom} setSelectedStop={setSelectedStop}/>
+                        <Stop 
+                            stop={stop} 
+                            zoom={zoom} 
+                            setSelectedStop={setSelectedStop}
+                            setSelectedTrain={setSelectedTrain}
+                            setSelectedLine={setSelectedLine}/>
                     </>
                 })}
                 {selectedStop && <MapViewDirections
@@ -86,9 +96,9 @@ export default function Map(props){
                     }}
                     destination={selectedStop.location}
                     strokeWidth={5}
-                    strokeColor={"darkblue"}
+                    strokeColor={"#4B9CD3"}
                     apikey={GOOGLE_MAPS_API_KEY}
-                    mode={'walking'}
+                    mode={'WALKING'}
                     onReady={result => {
                         setDistanceToStop(result.distance);
                         setTimeToStop(result.duration);}}/>}
@@ -98,6 +108,9 @@ export default function Map(props){
                 setSelectedStop={setSelectedStop}
                 distanceToStop={distanceToStop}
                 timeToStop={timeToStop}/>
+            <TrainBottomDrawer
+                selectedTrain={selectedTrain}
+                setSelectedTrain={setSelectedTrain}/>
         </View>
     </>
 }

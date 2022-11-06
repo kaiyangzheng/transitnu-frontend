@@ -29,14 +29,10 @@ export default function BottomDrawer(props) {
           justifyContent: 'center',
         }}
       >
-        {/* <Button
-          title="Open Bottom Sheet"
-          onPress={() => sheetRef.current.snapTo(0)}
-        /> */}
       </View>
       <BottomSheet
         ref={sheetRef}
-        snapPoints={[300, 800, 0]}
+        snapPoints={[250, 800, 0]}
         borderRadius={10}
         renderContent={renderContent}
         onCloseEnd={()=>{

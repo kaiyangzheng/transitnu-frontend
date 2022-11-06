@@ -1,8 +1,7 @@
 import React from 'react';
 import BottomDrawer from './BottomDrawer';
 import { StyleSheet, View, Text, Image} from 'react-native'
-import { FontAwesome5 } from '@expo/vector-icons'; 
-import { Entypo } from '@expo/vector-icons'; 
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 export default function StopBottomDrawer(props){
     const {selectedStop, setSelectedStop, distanceToStop, timeToStop} = props;
@@ -13,38 +12,44 @@ export default function StopBottomDrawer(props){
 
     return <>
         <BottomDrawer selectItem={selectedStop} setSelectItem={setSelectedStop}>
-            <View style={styles.titleContainer}>
-                <Image source={require('./../../assets/MBTA-logo.png')} style={{height: 20, width: 20 }}/>
-                <Text style={styles.stationTitle}>
-                    {selectedStop.name}
-                </Text>
-            </View>
-            <View style={styles.bodyContainer}>
-                <View style={styles.cityContainer}>
-                    <FontAwesome5 name="city" size={24} color="black" />
-                    <Text style={styles.city}>{selectedStop.municipality}</Text>
+                <View style={styles.titleContainer}>
+                    <Image source={require('./../../assets/MBTA-logo.png')} style={{height: 30, width: 30 }}/>
+                    <Text style={styles.stationTitle}>
+                        {selectedStop.name}
+                    </Text>
                 </View>
-                <View style={styles.coordContainer}>
-                    <Entypo name="location-pin" size={30} color="black" />
-                    <Text style={styles.coord}>{distanceToStop} km</Text>
+                <View style={styles.topInfoContainer}>
+                    <View style={styles.bodyContainer}>
+                        <View style={styles.cityContainer}>
+                            <MaterialIcons name="location-city" size={24} color="black" />
+                            <Text style={styles.city}>{selectedStop.municipality}</Text>
+                        </View>
+                        <View style={styles.coordContainer}>
+                            <MaterialIcons name="location-on" size={24} color="black" />
+                            <Text style={styles.coord}>{distanceToStop} km</Text>
+                        </View>
+                        <View style={styles.walkTimeContainer}>
+                            <MaterialIcons name="directions-walk" size={24} color="black" />
+                            <Text style={styles.walkTime}>{Math.round(timeToStop * 100) / 100} min</Text>
+                        </View>
+                    </View>
                 </View>
-                <View style={styles.walkTimeContainer}>
-                    <FontAwesome5 style={styles.walkingIcon} name="walking" size={30} color="black" />
-                    <Text style={styles.walkTime}>{Math.round(timeToStop * 100) / 100} min</Text>
-                </View>
-            </View>
         </BottomDrawer>
     </>
 }
 
 const styles = StyleSheet.create({
+    topInfoContainer: {
+        paddingLeft: 10,
+        paddingRight: 10
+    },
     titleContainer: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
     },
     stationTitle: {
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
         marginLeft: 10
     },
@@ -55,33 +60,30 @@ const styles = StyleSheet.create({
     cityContainer:{
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     city: {
-        fontSize: 17,
+        fontSize: 20,
         marginLeft: 10
     },
     coordContainer: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 5
+        marginTop: 5,
     },
     coord: {
-        fontSize: 17,
+        fontSize: 20,
         marginLeft: 10
     },
     walkTimeContainer: {
         display: 'flex',
         flexDirection: 'row',
         alignContent: 'center',
-        marginTop: 5
-    },
-    walkingIcon: {
-        marginLeft: 5
+        marginTop: 5,
     },
     walkTime:{
-        fontSize: 17,
-        marginLeft: 15
+        fontSize: 20,
+        marginLeft: 10
     }
 })
