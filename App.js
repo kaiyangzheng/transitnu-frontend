@@ -7,6 +7,7 @@ import {
   getLines,
   getStops,
   getTrains,
+  getPredictions,
 } from './utils/loadData';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
   const [lines, setLines] = useState([]);
   const [stops, setStops] = useState([])
   const [trains, setTrains] = useState([]);
+  const [predictions, setPredictions] = useState([]);
   const [selectedLine, setSelectedLine] = useState(null);
   const [selectedStop, setSelectedStop] = useState(null);
   const [selectedTrain, setSelectedTrain] = useState(null);
@@ -35,6 +37,7 @@ export default function App() {
       await getLines(setLines);
       await getStops(setStops);
       await getTrains(setTrains);
+      await getPredictions(setPredictions);
     }
 
     getData();
@@ -54,6 +57,7 @@ export default function App() {
         lines={lines}
         trains={trains}
         stops={stops}
+        predictions={predictions}
         selectedLine={selectedLine}
         setSelectedLine={setSelectedLine}
         selectedTrain={selectedTrain}

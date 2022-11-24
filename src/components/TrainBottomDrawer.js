@@ -1,15 +1,17 @@
 import React from 'react';
 import BottomDrawer from './BottomDrawer'
 import { StyleSheet, View, Text, Image} from 'react-native'
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-
 
 export default function TrainBottomDrawer(props){
-    const {selectedTrain, setSelectedTrain} = props;
+    const {selectedTrain, setSelectedTrain, predictions} = props;
 
     if (!selectedTrain){
         return null;
     }
+
+    let trainPredictions = predictions.filter((prediction) => {
+        return prediction.vehicle_id == selectedTrain.id;
+    })
 
     return <>
         <BottomDrawer selectItem={selectedTrain} setSelectItem={setSelectedTrain}>
@@ -36,15 +38,25 @@ export default function TrainBottomDrawer(props){
             <View style={styles.topInfoContainer}>
                 <View style={styles.bodyContainer}>
                     <View style={styles.lineContainer}>
-                        <Text>{selectedTrain.line.name}</Text>
+                        <Text style={styles.line}>{selectedTrain.line.name}</Text>
                     </View>
                     <View style={styles.directionContainer}>
-                        <Text>{selectedTrain.line.direction_names[0]} &mdash; {selectedTrain.line.direction_destinations[0]}</Text>
-                        <Text>{selectedTrain.line.direction_names[1]} &mdash; {selectedTrain.line.direction_destinations[1]}</Text>
+                        <Text style={selectedTrain.direction_id == 0 ? styles.boldLine : styles.line}>{selectedTrain.line.direction_names[0]} &mdash; {selectedTrain.line.direction_destinations[0]}</Text>
+                        <Text style={selectedTrain.direction_id == 1 ? styles.boldLine : styles.line}>{selectedTrain.line.direction_names[1]} &mdash; {selectedTrain.line.direction_destinations[1]}</Text>
                     </View>
                     <View style={styles.statusContainer}>
-                        <Text>{selectedTrain.status} {selectedTrain.stop.name}</Text>
+                        <Text style={styles.line}>{selectedTrain.status.replace('_', ' ')} {selectedTrain.stop.name}</Text>
                     </View>
+                </View>
+            </View>
+            <View style={styles.predictionContainer}>
+                <Text style={styles.predictionTitle}>Predictions</Text>
+                <View style={styles.predictionList}>
+                    {trainPredictions.map((prediction)=>{
+                        return <View style={styles.predictionListItem}>
+                            {prediction.stop.name} — arrival: {prediction.arrival_time}, departure: {prediction.departure_time}
+                        </View>
+                    })}
                 </View>
             </View>
         </BottomDrawer>
@@ -87,9 +99,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 5,
     },
-    coord: {
-        fontSize: 20,
-        marginLeft: 10
+    line: {
+        fontSize: 15,
+    },
+    boldLine: {
+        fontSize: 15,
+        fontWeight: 'bold'
     },
     directionContainer: {
         display: 'flex',
@@ -99,5 +114,22 @@ const styles = StyleSheet.create({
     directionTime:{
         fontSize: 20,
         marginLeft: 10
+    },
+    predictionContainer: {
+        display: 'flex',
+        alignContent: 'center',
+        marginTop: 30
+    },
+    predictionTitle: {
+        marginLeft: 10,
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
+    predictionList: {
+        marginLeft: 10,
+    },
+    predictionListItem: {
+        fontSize: 15,
+        marginTop: 5,
     }
 })

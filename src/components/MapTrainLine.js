@@ -3,7 +3,7 @@ import polyline, { decode } from 'polyline'
 import {Polyline} from 'react-native-maps';
 
 export default function MapTrainLine(props){
-    const { encodedPolyline, color } = props;
+    const { line, encodedPolyline, color, setSelectedLine, setSelectedStop, setSelectedTrain } = props;
     let decodedPolyline = polyline.decode(encodedPolyline);
     let formattedPolyline = []
     for (let i = 0; i < decodedPolyline.length; i++){
@@ -17,6 +17,12 @@ export default function MapTrainLine(props){
 		    coordinates={formattedPolyline}
             strokeColor={color}
             strokeWidth={6}
+            tappable={true}
+            onPress={()=>{
+                setSelectedLine(line);
+                setSelectedStop(null);
+                setSelectedTrain(null);
+            }}
 	    />
     </>
 

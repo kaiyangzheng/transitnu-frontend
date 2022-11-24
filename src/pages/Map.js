@@ -8,6 +8,7 @@ import Train from '../components/Train';
 import Stop from '../components/Stop';
 import StopBottomDrawer from '../components/StopBottomDrawer';
 import TrainBottomDrawer from '../components/TrainBottomDrawer';
+import LineBottomDrawer from '../components/LineBottomDrawer';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBVssmK2nnbTz3XIA1htc_sBxHd0WqmDhw';
 
@@ -16,6 +17,7 @@ export default function Map(props){
             lines, 
             trains, 
             stops, 
+            predictions,
             selectedTrain,
             setSelectedTrain,
             selectedStop,
@@ -31,10 +33,6 @@ export default function Map(props){
     const [zoom, setZoom] = useState((Math.log(360 / 0.04) / Math.LN2))
     const [distanceToStop, setDistanceToStop] = useState(0);
     const [timeToStop, setTimeToStop] = useState(0);
-
-    let trainStops = stops.filter((stop)=>{
-        return stop['id'].startsWith('place');
-    })
 
     return <>
         <View style={styles.container}>
@@ -64,8 +62,12 @@ export default function Map(props){
                     return <>
                         {polylines.map((polyline)=>{
                             return <MapTrainLine
+                                line={line}
                                 encodedPolyline={polyline}
-                                color={color}/>
+                                color={color}
+                                setSelectedLine={setSelectedLine}
+                                setSelectedStop={setSelectedStop}
+                                setSelectedTrain={setSelectedTrain}/>
                         })}
                     </>
                 })}
@@ -79,7 +81,7 @@ export default function Map(props){
                     </>
                 })}
 
-                {trainStops.map((stop)=>{
+                {stops.map((stop)=>{
                     return <>
                         <Stop 
                             stop={stop} 
@@ -107,10 +109,15 @@ export default function Map(props){
                 selectedStop={selectedStop} 
                 setSelectedStop={setSelectedStop}
                 distanceToStop={distanceToStop}
-                timeToStop={timeToStop}/>
+                timeToStop={timeToStop}
+                predictions={predictions}/>
             <TrainBottomDrawer
                 selectedTrain={selectedTrain}
-                setSelectedTrain={setSelectedTrain}/>
+                setSelectedTrain={setSelectedTrain}
+                predictions={predictions}/>
+            <LineBottomDrawer
+                selectedLine={selectedLine}
+                setSelectedLine={setSelectedLine}/>
         </View>
     </>
 }
