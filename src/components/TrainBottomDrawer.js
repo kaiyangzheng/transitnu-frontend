@@ -53,8 +53,27 @@ export default function TrainBottomDrawer(props){
                 <Text style={styles.predictionTitle}>Predictions</Text>
                 <View style={styles.predictionList}>
                     {trainPredictions.map((prediction)=>{
+                        let currentTime = new Date();
+                        let arrivalTime = new Date(prediction.arrival_time);
+                        let departureTime = new Date(prediction.departure_time);
+
+                        let arrivalDiff = arrivalTime - currentTime;
+
+                        if (arrivalDiff <= 0){
+                            return;
+                        }
+                        arrivalTime = arrivalTime.toLocaleTimeString();
+                        departureTime = departureTime.toLocaleTimeString();
                         return <View style={styles.predictionListItem}>
-                            {prediction.stop.name} — arrival: {prediction.arrival_time}, departure: {prediction.departure_time}
+                            <Text style={styles.predictionListTitle}>
+                                {prediction.stop.name}
+                            </Text>
+                            <Text>
+                                Arrival: {arrivalTime} 
+                            </Text>
+                            <Text>
+                                Departure: {departureTime}
+                            </Text>
                         </View>
                     })}
                 </View>
@@ -130,6 +149,13 @@ const styles = StyleSheet.create({
     },
     predictionListItem: {
         fontSize: 15,
-        marginTop: 5,
+        marginTop: 10,
+        padding: 5,
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: 'black',
+    },
+    predictionListTitle:{
+        fontWeight: '600'
     }
 })
